@@ -11,6 +11,9 @@ h1{
 p.intro-text{
     margin-bottom: 3%;
 }
+p, li a{
+    font-size: 20px;
+}
 .container{
     text-align: center;
 }
