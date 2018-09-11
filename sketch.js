@@ -15,9 +15,15 @@ function draw(){
     arc(300, 150, 240,150, 700, 120, OPEN);
 
     // Eyes
-    fill('rgba(0,0,0,1)');
-    ellipse(350, 280, 100, 50);
-    ellipse(250, 280, 50, 100);
+    fill('rgba(255,255,255,1)');
+    ellipseMode(RADIUS);
+    ellipse(350, 280, 50, 25);
+    ellipse(250, 280, 50, 25);
+    fill(100);
+    ellipseMode(CENTER);
+    ellipse(350, 280, 50, 50);
+    ellipse(250, 280, 50, 50);
+
 
     // ears
     fill('rgb(255,255,255)');
