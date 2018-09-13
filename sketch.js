@@ -3,33 +3,49 @@ function setup() {
 }
 
 function draw(){
-    background(220);
+
+    var bg = 200;
+    var headX = 200, headY = 200, headW = 200, headH = headW+50;
+
+    var hairX = 300, hairY = 150, hairW = 240, hairH = 150, hairStart = 700, hairClose = 120, hairType = OPEN;
+
+    var eyesRX = 350, eyesRY = 280, eyesRW = 50, eyesRH = 25, pupilRH = 50;
+    var eyesLX = 250, eyesLY = 280, eyesLW = 50, eyesLH = 25, pupilLH = 50;
+
+    var earLX = 175, earLY = 250, earLW = 40, earLH = 40;
+    var earRX = 425, earRY = 250, earRW = 40, earRH = 40;
+
+    var mouthX = 250, mouthY = 380, mouthW = 350, mouthH = 380;
+
+    var earColor = "white", eyeColor = "white", pupilColor = 100, hairColor = "black", headColor = "grey";
+
+
+    background(bg);
 
     // head
-    fill('rgba(0,0,0,.3)');
-    rect(200,200,200,250);
+    fill(headColor);
+    rect(headX,headY,headW,headH);
 
     // hair
-    fill('rgba(0,0,0,.2)');
-    fill('rgba(0,0,0,1)');
-    arc(300, 150, 240,150, 700, 120, OPEN);
+    fill(hairColor);
+    arc(hairX, hairY, hairW,hairH, hairStart, hairClose, hairType);
 
     // Eyes
-    fill('rgba(255,255,255,1)');
+    fill(eyeColor);
     ellipseMode(RADIUS);
-    ellipse(350, 280, 50, 25);
-    ellipse(250, 280, 50, 25);
-    fill(100);
+    ellipse(eyesRX, eyesRY, eyesRW, eyesRH);
+    ellipse(eyesLX, eyesLY, eyesLW, eyesLH);
+    fill(pupilColor);
     ellipseMode(CENTER);
-    ellipse(350, 280, 50, 50);
-    ellipse(250, 280, 50, 50);
-
+    ellipse(eyesRX, eyesRY, eyesRW, pupilRH);
+    ellipse(eyesLX, eyesLY, eyesLW, pupilLH);
 
     // ears
-    fill('rgb(255,255,255)');
-    ellipse(175,250,40,40);
-    ellipse(425,250, 40, 40);
+    fill(earColor);
+    ellipse(earLX,earLY,earLW,earLH);
+    ellipse(earRX,earRY,earRW,earRH);
+
 
     // mouth
-    line(250,380,350,380)
+    line(mouthX,mouthY,mouthW,mouthH);
 }
