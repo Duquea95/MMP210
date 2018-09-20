@@ -12,8 +12,8 @@ function draw(){
     var eyesRX = 450, eyesRY = 280, eyesRW = 50, eyesRH = 35, pupilRH = 50;
     var eyesLX = 350, eyesLY = 280, eyesLW = 50, eyesLH = 35, pupilLH = 50;
 
-    var earLX = 270, earLY = 250, earLW = 40, earLH = 40;
-    var earRX = 530, earRY = 250, earRW = 40, earRH = 40;
+    var earLX = 280, earLY = 280, earLW = 40, earLH = 40;
+    var earRX = 520, earRY = 280, earRW = 40, earRH = 40;
 
     var mouthX = 450, mouthY = 380, mouthW = 350, mouthH = 380;
 
