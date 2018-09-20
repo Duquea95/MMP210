@@ -9,8 +9,8 @@ function draw(){
 
     var hairX = 400, hairY = 240, hairW = 250, hairH = 210;
 
-    var eyesRX = 450, eyesRY = 280, eyesRW = 50, eyesRH = 25, pupilRH = 50;
-    var eyesLX = 350, eyesLY = 280, eyesLW = 50, eyesLH = 25, pupilLH = 50;
+    var eyesRX = 450, eyesRY = 280, eyesRW = 50, eyesRH = 35, pupilRH = 50;
+    var eyesLX = 350, eyesLY = 280, eyesLW = 50, eyesLH = 35, pupilLH = 50;
 
     var earLX = 270, earLY = 250, earLW = 40, earLH = 40;
     var earRX = 530, earRY = 250, earRW = 40, earRH = 40;
