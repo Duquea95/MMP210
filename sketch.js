@@ -17,7 +17,7 @@ function draw(){
 
     var mouthX = 250, mouthY = 380, mouthW = 350, mouthH = 380;
 
-    var earColor = "white", eyeColor = "white", pupilColor = 100, hairColor = "black", headColor = "grey";
+    var earColor = "yellow", eyeColor = "white", pupilColor = "black", hairColor = "black", headColor = "yellow";
 
 
     background(bg);
