@@ -1,6 +1,11 @@
 function setup() {
     createCanvas(800,800);
+    frameRate(30);
 }
+
+var pupilRX = 350;
+var pupilLX = 450;
+var direction = 1;
 
 function draw(){
 
@@ -19,7 +24,11 @@ function draw(){
 
     var earColor = "rgb(214,185,140)", eyeColor = "white", pupilColor = "black", hairColor = "black", headColor = "rgb(214,185,140)";
 
-    background(bg);
+    var r = 200;
+    var g = map(mouseX, 0, width, 0, 255); // green
+    var b = map(mouseY, 0, height, 255, 0); // blue
+    // fill(r, g, b);
+    background(r,g,b);
 
     // hair
     fill(hairColor);
@@ -30,8 +39,9 @@ function draw(){
     ellipse(earLX,earLY,earLW,earLH);
     ellipse(earRX,earRY,earRW,earRH);
 
+
     // head
-    fill(headColor);
+    fill(headColor)
     ellipse(headX,headY,headW,headH);
 
     // Eyes
@@ -41,9 +51,25 @@ function draw(){
     ellipse(eyesLX, eyesLY, eyesLW, eyesLH);
     fill(pupilColor);
     ellipseMode(CENTER);
-    ellipse(eyesRX, eyesRY, eyesRW, pupilRH);
-    ellipse(eyesLX, eyesLY, eyesLW, pupilLH);
+
+    pupilLX = pupilLX + 1 * direction;
+    pupilRX = pupilRX + 1 * direction;
+
+    if(pupilLX == 475 || pupilLX == 425 && pupilRX == 325 || pupilRX == 375){
+        direction *= -1;
+    }
+    // if(pupilLX == 425){
+    //     pupilLX = pupilLX += 1;
+    // }
+    // else {
+    //     pupilLX = pupilLX -=1;
+    // }
+
+
+    ellipse(pupilRX, eyesRY, eyesRW, pupilRH);
+    ellipse(pupilLX, eyesLY, eyesLW, pupilLH);
 
     // mouth
     line(mouthX,mouthY,mouthW,mouthH);
+
 }
