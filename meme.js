@@ -20,10 +20,10 @@ function draw(){
     text("Wow P5", 520,200);
     textSize(40);
 
-    text("Such Usefulness", 20,600);
+    text("Such Usefulness", 20,580);
     textSize(40);
 
-    text("Wow", 520,700);
+    text("Wow", 520,640);
     textSize(40);
 
 	image(img,150, 150, mouseX, mouseY);
