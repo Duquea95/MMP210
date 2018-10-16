@@ -24,8 +24,8 @@ function draw(){
     // text("Wow", 520,640);
     // textSize(40);
     //
-	image(img, mouseX, mouseY);
     background('white');
+	image(img, mouseX, mouseY);
     // tint(255, 0, 255);
     strokeWeight(1); stroke("black");
     line(width/2, 0, width/2, height);
