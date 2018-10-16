@@ -25,7 +25,7 @@ function draw(){
     // textSize(40);
     //
     background('white');
-	image(img, mouseX, mouseY);
+	// image(img,150,150, mouseX, mouseY);
     // tint(255, 0, 255);
     strokeWeight(1); stroke("black");
     line(width/2, 0, width/2, height);
@@ -34,30 +34,38 @@ function draw(){
 
     if (mouseX < width/2 && mouseY < height/2) {
         // top left
+        image(img,50,50, mouseX, mouseY);
+        tint(255, 0, 255);
         textFont('Comic Sans MS');
         text("Much Animation", 20,100);
         textSize(40);
         fill('plum');
     } else if (mouseX > width/2 && mouseY < height/2) {
         // top right
+        image(img,50,50, mouseX, mouseY);
+        tint('green');
         text("Wow P5", 520,200);
         textSize(40);
         fill('lightblue');
     } else if (mouseX < width/2 && mouseY > height/2) {
         // bottom left
+        image(img,50,50, mouseX, mouseY);
+        tint('gold');
         text("Such Usefulness", 20,580);
         textSize(40);
-        fill('gold');
+        fill('red')
     } else {
         // bottom right
+        image(img,50,50, mouseX, mouseY);
+        tint('lightgreen');
         text("Wow", 520,640);
         textSize(40);
-        fill('lightgreen');
+        fill('yellow');
     }
 
-    if (mouseIsPressed) {
-        var s = (mouseX - pmouseX) + (mouseY - pmouseY);
-        ellipse(mouseX, mouseY, s);
-    }
+    // if (mouseIsPressed) {
+    //     var s = (mouseX - pmouseX) + (mouseY - pmouseY);
+    //     ellipse(mouseX, mouseY, s);
+    // }
 
 }
