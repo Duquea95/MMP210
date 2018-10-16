@@ -2,36 +2,24 @@ var img;
 
 function preload() {
 	img = loadImage("doge.png");
+	img2 = loadImage("doge-wow.png");
+	img3 = loadImage("doge-bread.png");
+	img4 = loadImage("doge-cool.png");
 }
 
 function setup() {
-    createCanvas(680, 680);
+    createCanvas(720, 720);
     background(250);
 }
 
 function draw(){
-    rectMode(CENTER);
-    // fill('plum');
-    // textFont('Comic Sans MS');
-    // text("Much Animation", 20,100);
-    // textSize(40);
-    //
-    // text("Wow P5", 520,200);
-    // textSize(40);
-    //
-    // text("Such Usefulness", 20,580);
-    // textSize(40);
-    //
-    // text("Wow", 520,640);
-    // textSize(40);
-    //
+    // rectMode(CENTER);
     background('black');
 	// image(img,150,150, mouseX, mouseY);
     // tint(255, 0, 255);
     strokeWeight(1); stroke("white");
     line(width/2, 0, width/2, height);
     line(0, height/2, width, height/2);
-    // fill('black');
 
     if (mouseX < width/2 && mouseY < height/2) {
         // top left
@@ -42,12 +30,13 @@ function draw(){
         textSize(40);
         fill('plum');
         if (mouseIsPressed) {
+            text('ok');
             fill('blue');
         }
 
     } else if (mouseX > width/2 && mouseY < height/2) {
         // top right
-        image(img, mouseX, mouseY, 250, 250);
+        image(img2, mouseX, mouseY, 250, 250);
         tint('green');
         var text1 = text("Wow P5", 520,200);
         textSize(40);
@@ -59,7 +48,7 @@ function draw(){
         }
     } else if (mouseX < width/2 && mouseY > height/2) {
         // bottom left
-        image(img, mouseX, mouseY, 250, 250);
+        image(img3, mouseX, mouseY, 250, 250);
         tint('gold');
         text("Such Usefulness", 20,580);
         textSize(40);
@@ -71,7 +60,7 @@ function draw(){
         }
     } else {
         // bottom right
-        image(img, mouseX, mouseY, 250, 250);
+        image(img4, mouseX, mouseY, 250, 250);
         tint('white');
         text("Wow", 520,640);
         textSize(40);
@@ -82,10 +71,5 @@ function draw(){
             fill('green');
         }
     }
-
-    // if (mouseIsPressed) {
-    //     var s = (mouseX - pmouseX) + (mouseY - pmouseY);
-    //     ellipse(mouseX, mouseY, s);
-    // }
 
 }
