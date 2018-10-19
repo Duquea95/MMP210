@@ -13,16 +13,14 @@ function setup() {
 }
 
 function draw(){
-    // rectMode(CENTER);
     background('black');
-	// image(img,150,150, mouseX, mouseY);
-    // tint(255, 0, 255);
     strokeWeight(1); stroke("white");
     line(width/2, 0, width/2, height);
     line(0, height/2, width, height/2);
 
     if (mouseX < width/2 && mouseY < height/2) {
         // top left
+        // image(img, mouseX, mouseY, 250, 250);
         image(img, mouseX, mouseY, 250, 250);
         tint(255, 0, 255);
         textFont('Comic Sans MS');
@@ -42,8 +40,6 @@ function draw(){
         textSize(40);
         fill('lightblue');
         if (mouseIsPressed) {
-            // text1.remove();
-            // text("I'm a floating head", 520,200);
             fill('white');
         }
     } else if (mouseX < width/2 && mouseY > height/2) {
@@ -54,8 +50,6 @@ function draw(){
         textSize(40);
         fill('red')
         if (mouseIsPressed) {
-            // text1.remove();
-            // text("I'm a floating head", 520,200);
             fill('purple');
         }
     } else {
@@ -66,8 +60,6 @@ function draw(){
         textSize(40);
         fill('yellow');
         if (mouseIsPressed) {
-            // text1.remove();
-            // text("I'm a floating head", 520,200);
             fill('green');
         }
     }
