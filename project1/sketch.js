@@ -3,11 +3,15 @@ function setup() {
     frameRate(30);
 }
 
+// X coordinate variables for pupils & direction
+
 var pupilRX = 350;
 var pupilLX = 450;
 var direction = 1;
 
 function draw(){
+
+    // Declare vairables
 
     var bg = 200;
     var headX = 400, headY = 300, headW = 250, headH = headW+50;
@@ -52,20 +56,16 @@ function draw(){
     fill(pupilColor);
     ellipseMode(CENTER);
 
+
+    // Animate Eyes
     pupilLX = pupilLX + 1 * direction;
     pupilRX = pupilRX + 1 * direction;
 
+    // Function for containing pupil animation within eyes
     if(pupilLX == 475 || pupilLX == 425 && pupilRX == 325 || pupilRX == 375){
         direction *= -1;
     }
-    // if(pupilLX == 425){
-    //     pupilLX = pupilLX += 1;
-    // }
-    // else {
-    //     pupilLX = pupilLX -=1;
-    // }
-
-
+    
     ellipse(pupilRX, eyesRY, eyesRW, pupilRH);
     ellipse(pupilLX, eyesLY, eyesLW, pupilLH);
 
