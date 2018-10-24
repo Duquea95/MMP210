@@ -1,6 +1,6 @@
 // Initialize variable
 var img;
-var x = 0, y = 0, s = 0;
+var x = 0, y = 0, r, g, b;
 
 // function for preloading multiple image before canvas
 function preload() {
@@ -15,95 +15,96 @@ function setup() {
     createCanvas(980, 980);
     background(250);
 	textFont('Comic Sans MS');
+	frameRate(120);
 }
 
 function draw(){
-	x += 5;
 
-	// Increase x-axis speed by 5. x = 5, y = 0
 	//Canvas background
     background('black');
+
+	// Randomize Colors
+	r = random(0,255);
+	g = random(0,255);
+	b = random(0,255);
 
 	// Line weight and color
     strokeWeight(1); stroke("white");
     line(width/2, 0, width/2, height);
     line(0, height/2, width, height/2);
 
-	// Divide canvas into 4 quadrants
-    if (x < width/2 && y < height/2){
+	// When x-axis is less than 700 & y-axis is 0
+	if(x < 700 && y == 0){
 
-        // top left
-		// Style font & allow user to move image with mouse
+		// Image 1 with random tint
 		image(img, x, y, 250, 250);
-		tint(255, 0, 255);
+		tint(r,g,b);
 
-		translate(20, 20);
-		var r = frameCount / 1000 * PI;
+		// Move image to the right by the speed of 5
+		x += 5;
+
+		// Translate and Shear X-axis of text
+		translate(20, 50);
+		var r = frameCount / 500 * PI;
 		shearX(r);
+
+		// Declare Text, Text Size & Color
 		text("Much Animation", 20,100);
 		textSize(40);
 		fill('plum');
+	}
+	// When x-axis is 700 & y-axis is less than 700
+	else if( x == 700 && y < 700){
+		y += 5;
 
-		// Change image & text state on click
-        // if (mouseIsPressed) {
-        //     text('ok');
-        //     fill('blue');
-        // }
+		// Image 2 with random tint
+		image(img2, x, y, 250, 250);
+		tint(r,g,b);
 
-    } else if (x > width/2 && y < height/2) {
-        // top right
-		// Style font & allow user to move image with mouse
-        image(img2, x, y, 250, 250);
-        tint('green');
+		// Translate and Shear Y-axis of text
+		translate(10, 10);
+		var r = frameCount / 2000 * PI;
+		shearY(r);
 
-		translate(20, 20);
-		var r = frameCount / 1000 * PI;
+		// Declare Text, Text Size & Color
+		var text1 = text("Wow P5", 520,200);
+		textSize(40);
+		fill('lightblue');
+	}
+	// When x-axis is greater than 10 & y-axis is 700
+	else if(y == 700 && x > 10){
+		x -= 5;
+
+		// Image 4 with random tint
+		image(img4, x, y, 250,250);
+		tint(r,g,b);
+
+		// Translate and Shear X-axis of text
+		translate(-300, -100);
+		var r = frameCount / 2000 * PI;
 		shearX(r);
-        var text1 = text("Wow P5", 520,200);
-        textSize(40);
-        fill('lightblue');
 
+		// Declare Text, Text Size & Color
+		text("Wow", 520,640);
+		textSize(40);
+		fill('yellow');
+	}
+	// When x-axis is 10 & y-axis is less than or equal to 700
+	else if(x == 10 && y <= 700){
+		y -= 5;
 
-		// Change image & text state on click
-        if(y <= 700){
-			// x = 0;
-			x -= 5;
-			y += 5;
-			// scale(2)
-			// text1 = text('Cool!');
-			fill('white');
-        }
-    } else if (x < width/2 && y > height/2){
-        // bottom left
-		// Style font & allow user to move image with mouse
-        image(img3, x, y, 250, 250);
-        tint('gold');
-        text("Such Usefulness", 20,580);
-        textSize(40);
-        fill('red');
+		// Image 3 with random tint
+		image(img3, x, y, 250, 250);
+		tint(r,g,b);
 
-		// Change image & text state on click
-        // if (y >= 700){
-        //     fill('purple');
-		// 	x -= -10;
-		// 	y = -25;
-        // }
-    }
-	else {
-        // bottom right
-		// Style font & allow user to move image with mouse
-		// x -= 5;
-        image(img4, x, y, 250,250);
-        tint('white');
-        text("Wow", 520,640);
-        textSize(40);
-        fill('yellow');
-		// if( y > height && x > width){
-		// 	x = -5;
-		// 	y = -5;
-		// }
+		// Translate and Shear Y-axis of text
+		translate(50, -200);
+		var r = frameCount / 5000 * PI ;
+		shearY(r);
 
-		// Change image & text state on click
-    }
-
+		// Declare Text, Text Size & Color
+		text("Such Usefulness", 20,580);
+		textSize(40);
+		fill('green');
+	}
 }
