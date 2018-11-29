@@ -31,8 +31,8 @@ function draw() {
 		textSize(42);
 		fill("black");
 		text("Final Project Idea", width/2, height/8);
-		textSize(24);
-		text("Online oscillator.", width/2, height/4);
+		textSize(32);
+		text("Online Oscillator", width/2, height/4);
 		text("It will feature 4 types of oscillators for a variety in sounds.", width/2, height/3);
 		text("It also identifies the note played by the oscillator as well as the Hertz.", width/2, height/2.3);
 
