@@ -1,6 +1,6 @@
 var serial;
 var portName = "COM3";
-var sensorValue;
+var sensorValue, sensorValue2;
 
 function setup() {
 	createCanvas(800, 800);
@@ -33,6 +33,7 @@ function serialError() {
 
 function serialEvent() {
 	var currentString = serial.readLine(); // read the incoming string
+	console.log(currentString);
 	trim(currentString); // remove any trailing whitespace
 	if (!currentString) {
 		return; // if the string is empty, do no more

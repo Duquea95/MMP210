@@ -1,7 +1,38 @@
+
+
+var serial;
+var portName = "COM3";
+var inData;
+var snareButton = 0, prevSnareButton = 0;
+var hatsButton = 0, prevHatsButton = 0;
+var sensorValue, sensorValue2;
 var osc,osc2,osc3,osc4, fft, type, square, note = "#", playing = false;
+var kick, snare, hats, clap, bass;
+
+function preload(){
+	kick = loadSound("kick.wav");
+	snare = loadSound("snare.wav");
+	hats = loadSound("hats.wav");
+	clap = loadSound("clap.wav");
+	bass = loadSound("808.wav");
+}
 
 function setup() {
 	createCanvas(windowWidth, windowHeight);
+
+	// Connect to p5
+	serial = new p5.SerialPort();
+	serial.on('connected', serverConnected);
+	serial.on('open', portOpen);
+	serial.on('data', serialEvent);
+	serial.on('error', serialError);
+	serial.on('close', portClose);
+
+	serial.open(portName);
+
+	// snare.playMode("restart");
+
+	// text setting
 	textFont("Helvetica");
 	textAlign(CENTER, CENTER);
 	rectMode(CENTER);
@@ -9,11 +40,52 @@ function setup() {
 	// osc2 = new p5.Oscillator();
 	// osc3 = new p5.Oscillator();
 	// osc4 = new p5.Oscillator();
+
 	osc.setType('sine');
 	osc.freq(400);
 	osc.amp(0);
 	osc.start();
-	type = osc.setType();
+
+	// osc2.setType('square');
+	// osc2.freq(400);
+	// osc2.amp(0);
+	// osc2.start();
+
+	// osc3.setType('sawtooth');
+	// osc3.freq(400);
+	// osc3.amp(0);
+	// osc3.start();
+
+	// osc4.setType('triangle');
+	// osc4.freq(400);
+	// osc4.amp(0);
+	// osc4.start();
+}
+
+function serverConnected() {
+	console.log('connected to server.');
+}
+
+function portOpen() {
+	console.log('the serial port opened.')
+}
+
+function portClose() {
+	console.log('The serial port closed.');
+}
+
+function serialError() {
+    console.log("error");
+}
+
+function serialEvent() {
+	var currentString = serial.readLine(); // read the incoming string
+	trim(currentString); // remove any trailing whitespace
+	if (!currentString) {
+		return; // if the string is empty, do no more
+	}
+	snareButton = currentString; // save it for the draw method
+
 }
 
 function draw() {
@@ -28,16 +100,17 @@ function draw() {
 	text(note, width/2, height/8);
 	osc.freq(mouseX);
 
+	// fill(color(r,g,b));
 	fill('white');
 
 	// Sine
-	btn1 = rect(175, 70, 150, 80);
+	rect(175, 70, 150, 80);
 	// Square
-	btn2 = rect(425, 70, 150, 80);
+	rect(425, 70, 150, 80);
 	// Sawtooth
-	btn3 = rect(850, 70, 150, 80);
+	rect(850, 70, 150, 80);
 	// Triangle
-	btn4 = rect(1100, 70, 150, 80);
+	rect(1100, 70, 150, 80);
 
 	fill('black');
 	text('sine', 180, 75);
@@ -48,42 +121,82 @@ function draw() {
 	textSize(24);
 	text(mouseX +"Hz", mouseX, mouseY);
 
+	// console.log(sensorValue);
+	// console.log(sensorValue2);
+
+	if (snareButton != 0 && prevSnareButton == 0) {
+		console.log('snare');
+		snare.play();
+		prevSnareButton = snareButton;
+	}
+	else {
+		// snare.stop();
+		if (snareButton == 0) {
+			prevSnareButton = 0;
+		}
+	}
+
+	// if (hatsButton != 0 && prevHatsButton == 0) {
+	// 	console.log('hats');
+	// 	hats.play();
+	// 	prevHatsButton = hatsButton;
+	// }
+	// else {
+	// 	// snare.stop();
+	// 	if (hatsButton == 0) {
+	// 		prevHatsButton = 0;
+	// 	}
+	// }
+
+
+}
+
+function keyTyped(){
+	if(key === 'a' ){
+		kick.play();
+	}
+	else if(key === 's'){
+		snare.play();
+	}
+	else if(key === 'd'){
+		hats.play();
+	}
+	else if(key === 'f'){
+		clap.play();
+	}
 }
 
 function mousePressed(){
-	// var d = dist(mouseX, mouseY, 175, 70);
-	// if(d < 35){
-	//
-	// }
+	if(mouseX > 100 && mouseX < 250 && mouseY > 30 && mouseY < 110){
+		console.log("btn1 was clicked");
+		osc.setType("sine");
+		osc.amp(1);
+		playing = true;
+		r = 0;
+		b = 0;
 
-	// if(mouseX > 100 && mouseX < 250 && mouseY > 30 && mouseY < 110){
-	// 	fill(green);
-	// 	console.log("btn1 was clicked");
-	// 	osc.setType("sine");
-	// 	osc.amp(1);
-	// 	playing = true;
-	// }
-	// else if(mouseX > 350 && mouseX < 500 && mouseY > 30 && mouseY < 110){
-	// 	console.log("btn2 was clicked");
-	// 	osc.setType("square");
-	// 	osc.amp(1);
-	// 	playing = true;
-	// }
-	// else if(mouseX > 775 && mouseX < 925 && mouseY > 30 && mouseY < 110){
-	// 	console.log("btn3 was clicked");
-	// 	osc.setType("sawtooth");
-	// 	osc.amp(1);
-	// 	playing = true;
-	// }
-	// else if(mouseX > 1025 && mouseX < 1175 && mouseY > 30 && mouseY < 110){
-	// 	console.log("btn4 was clicked");
-	// 	osc.setType("triangle");
-	// 	osc.amp(1);
-	// 	playing = true;
-	// }
-	// else{
-	// 	osc.amp(0);
-	// }
+	}
+	else if(mouseX > 350 && mouseX < 500 && mouseY > 30 && mouseY < 110){
+		console.log("btn2 was clicked");
+		osc.setType("square");
+		osc.amp(1);
+		playing = true;
+	}
+	else if(mouseX > 775 && mouseX < 925 && mouseY > 30 && mouseY < 110){
+		console.log("btn3 was clicked");
+		osc.setType("sawtooth");
+		osc.amp(1);
+		playing = true;
+	}
+	else if(mouseX > 1025 && mouseX < 1175 && mouseY > 30 && mouseY < 110){
+		console.log("btn4 was clicked");
+		osc.setType("triangle");
+		osc.amp(1);
+		playing = true;
+	}
+	else{
+		osc.amp(0);
+	}
 }
 
 function musicNote(n){
