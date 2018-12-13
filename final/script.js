@@ -1,10 +1,8 @@
-
-
+// var snareButton = 0, prevSnareButton = 0;
+// var hatsButton = 0, prevHatsButton = 0;
 var serial;
 var portName = "COM3";
 var inData;
-var snareButton = 0, prevSnareButton = 0;
-var hatsButton = 0, prevHatsButton = 0;
 var sensorValue, sensorValue2;
 var osc,osc2,osc3,osc4, fft, type, square, note = "#", playing = false;
 var kick, snare, hats, clap, bass;
@@ -21,14 +19,14 @@ function setup() {
 	createCanvas(windowWidth, windowHeight);
 
 	// Connect to p5
-	serial = new p5.SerialPort();
-	serial.on('connected', serverConnected);
-	serial.on('open', portOpen);
-	serial.on('data', serialEvent);
-	serial.on('error', serialError);
-	serial.on('close', portClose);
-
-	serial.open(portName);
+	// serial = new p5.SerialPort();
+	// serial.on('connected', serverConnected);
+	// serial.on('open', portOpen);
+	// serial.on('data', serialEvent);
+	// serial.on('error', serialError);
+	// serial.on('close', portClose);
+	//
+	// serial.open(portName);
 
 	// snare.playMode("restart");
 
@@ -37,29 +35,15 @@ function setup() {
 	textAlign(CENTER, CENTER);
 	rectMode(CENTER);
 	osc = new p5.Oscillator();
-	// osc2 = new p5.Oscillator();
-	// osc3 = new p5.Oscillator();
-	// osc4 = new p5.Oscillator();
+
+	envelope = new p5.Envelope();
+	envelope.setADSR(0.005, 0.2, 3, 3);
+	envelope.setRange(1, 0);
 
 	osc.setType('sine');
-	osc.freq(400);
-	osc.amp(0);
+	osc.amp(envelope);
 	osc.start();
-
-	// osc2.setType('square');
-	// osc2.freq(400);
-	// osc2.amp(0);
-	// osc2.start();
-
-	// osc3.setType('sawtooth');
-	// osc3.freq(400);
-	// osc3.amp(0);
-	// osc3.start();
-
-	// osc4.setType('triangle');
-	// osc4.freq(400);
-	// osc4.amp(0);
-	// osc4.start();
+	osc.freq(200);
 }
 
 function serverConnected() {
@@ -96,9 +80,10 @@ function draw() {
 
 	fill('black');
 
-	musicNote(note);
+	// musicNote(note);
+	keyTyped(note);
+
 	text(note, width/2, height/8);
-	osc.freq(mouseX);
 
 	// fill(color(r,g,b));
 	fill('white');
@@ -124,80 +109,165 @@ function draw() {
 	// console.log(sensorValue);
 	// console.log(sensorValue2);
 
-	if (snareButton != 0 && prevSnareButton == 0) {
-		console.log('snare');
-		snare.play();
-		prevSnareButton = snareButton;
-	}
-	else {
-		// snare.stop();
-		if (snareButton == 0) {
-			prevSnareButton = 0;
-		}
-	}
+		// if (snareButton != 0 && prevSnareButton == 0) {
+		// 	console.log('snare');
+		// 	snare.play();
+		// 	prevSnareButton = snareButton;
+		// }
+		// else {
+		// 	// snare.stop();
+		// 	if (snareButton == 0) {
+		// 		prevSnareButton = 0;
+		// 	}
+		// }
+}
 
-	// if (hatsButton != 0 && prevHatsButton == 0) {
-	// 	console.log('hats');
+function keyTyped1(){
+	// if(key === 'a' ){
+	// 	kick.play();
+	// }
+	// else if(key === 's'){
+	// 	snare.play();
+	// }
+	// else if(key === 'd'){
 	// 	hats.play();
-	// 	prevHatsButton = hatsButton;
 	// }
-	// else {
-	// 	// snare.stop();
-	// 	if (hatsButton == 0) {
-	// 		prevHatsButton = 0;
-	// 	}
+	// else if(key === 'f'){
+	// 	clap.play();
 	// }
-
-
 }
 
-function keyTyped(){
-	if(key === 'a' ){
-		kick.play();
-	}
-	else if(key === 's'){
-		snare.play();
-	}
-	else if(key === 'd'){
-		hats.play();
-	}
-	else if(key === 'f'){
-		clap.play();
-	}
-}
 
-function mousePressed(){
-	if(mouseX > 100 && mouseX < 250 && mouseY > 30 && mouseY < 110){
-		console.log("btn1 was clicked");
-		osc.setType("sine");
-		osc.amp(1);
-		playing = true;
-		r = 0;
-		b = 0;
-
+function keyTyped(n){
+	if(key == 'a'){
+		console.log("C3");
+		n = 60;
+		osc.freq(n);
+		envelope.play();
 	}
-	else if(mouseX > 350 && mouseX < 500 && mouseY > 30 && mouseY < 110){
-		console.log("btn2 was clicked");
-		osc.setType("square");
-		osc.amp(1);
-		playing = true;
+	if(key == 'w'){
+		console.log("C#3");
+		n = 61;
+		osc.freq(n);
+		envelope.play();
 	}
-	else if(mouseX > 775 && mouseX < 925 && mouseY > 30 && mouseY < 110){
-		console.log("btn3 was clicked");
-		osc.setType("sawtooth");
-		osc.amp(1);
-		playing = true;
+	if(key == 's'){
+		console.log("D3");
+		n = 62;
+		osc.freq(n);
+		envelope.play();
 	}
-	else if(mouseX > 1025 && mouseX < 1175 && mouseY > 30 && mouseY < 110){
-		console.log("btn4 was clicked");
-		osc.setType("triangle");
-		osc.amp(1);
-		playing = true;
+	if(key == 'e'){
+		console.log("D#3");
+		n = 63;
+		osc.freq(n);
+		envelope.play();
 	}
-	else{
-		osc.amp(0);
+	if(key == 'd'){
+		console.log("e");
+		n = 64;
+		osc.freq(n);
+		envelope.play();
 	}
+	if(key == 'f'){
+		n = 65;
+		osc.freq(n);
+		envelope.play();
+	}
+	if(key == 't'){
+		n = 66;
+		osc.freq(n);
+		envelope.play();
+	}
+	if(key == 'g'){
+		n = 68;
+		osc.freq(n);
+		envelope.play();
+	}
+	if(key == 'h'){
+		n = 70;
+		osc.freq(n);
+		envelope.play();
+	}
+	if(key == 'j'){
+		n = 72;
+		osc.freq(n);
+		envelope.play();
+	}
+	if(key == 'k'){
+		n = 74;
+		osc.freq(n);
+		envelope.play();
+	}
+	if(key == 'l'){
+		n = 76;
+		osc.freq(n);
+		envelope.play();
+	}
+	if(key == ';'){
+		n = 78;
+		osc.freq(n);
+		envelope.play();
+	}
+	if(key == '\''){
+		n = 80;
+		osc.freq(n);
+		envelope.play();
+	}
+	// else if(mouseX > 350 && mouseX < 500 && mouseY > 30 && mouseY < 110){
+	// 	console.log("btn2 was clicked");
+	// 	osc.setType("square");
+	// 	osc.amp(1);
+	// 	playing = true;
+	// }
+	// else if(mouseX > 775 && mouseX < 925 && mouseY > 30 && mouseY < 110){
+	// 	console.log("btn3 was clicked");
+	// 	osc.setType("sawtooth");
+	// 	osc.amp(1);
+	// 	playing = true;
+	// }
+	// else if(mouseX > 1025 && mouseX < 1175 && mouseY > 30 && mouseY < 110){
+	// 	console.log("btn4 was clicked");
+	// 	osc.setType("triangle");
+	// 	osc.amp(1);
+	// 	playing = true;
+	// }
+	// else{
+	// 	osc.amp(0);
+	// }
 }
+// function mousePressed(){
+// 	if(mouseX > 100 && mouseX < 250 && mouseY > 30 && mouseY < 110){
+// 		console.log("btn1 was clicked");
+// 		osc.setType("sine");
+// 		osc.amp(1);
+// 		playing = true;
+// 		r = 0;
+// 		b = 0;
+//
+// 	}
+// 	else if(mouseX > 350 && mouseX < 500 && mouseY > 30 && mouseY < 110){
+// 		console.log("btn2 was clicked");
+// 		osc.setType("square");
+// 		osc.amp(1);
+// 		playing = true;
+// 	}
+// 	else if(mouseX > 775 && mouseX < 925 && mouseY > 30 && mouseY < 110){
+// 		console.log("btn3 was clicked");
+// 		osc.setType("sawtooth");
+// 		osc.amp(1);
+// 		playing = true;
+// 	}
+// 	else if(mouseX > 1025 && mouseX < 1175 && mouseY > 30 && mouseY < 110){
+// 		console.log("btn4 was clicked");
+// 		osc.setType("triangle");
+// 		osc.amp(1);
+// 		playing = true;
+// 	}
+// 	else{
+// 		osc.amp(0);
+// 	}
+// }
 
 function musicNote(n){
 
