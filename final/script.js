@@ -2,10 +2,11 @@
 // var hatsButton = 0, prevHatsButton = 0;
 var serial;
 var portName = "COM3";
-var inData;
-var sensorValue, sensorValue2;
-var osc,osc2,osc3,osc4, fft, type, square, note = "#", playing = false;
+var sensorValue;
+var osc,osc2,osc3,osc4, note = "#";
 var kick, snare, hats, clap, bass;
+var note;
+var oscState1 = 0, oscState2 = 0, oscState3 = 0, oscState4 = 0;
 
 function preload(){
 	kick = loadSound("kick.wav");
@@ -16,17 +17,17 @@ function preload(){
 }
 
 function setup() {
-	createCanvas(windowWidth, windowHeight);
+	createCanvas(displayWidth, displayHeight);
 
 	// Connect to p5
-	// serial = new p5.SerialPort();
-	// serial.on('connected', serverConnected);
-	// serial.on('open', portOpen);
-	// serial.on('data', serialEvent);
-	// serial.on('error', serialError);
-	// serial.on('close', portClose);
-	//
-	// serial.open(portName);
+	serial = new p5.SerialPort();
+	serial.on('connected', serverConnected);
+	serial.on('open', portOpen);
+	serial.on('data', serialEvent);
+	serial.on('error', serialError);
+	serial.on('close', portClose);
+
+	serial.open(portName);
 
 	// snare.playMode("restart");
 
@@ -35,15 +36,38 @@ function setup() {
 	textAlign(CENTER, CENTER);
 	rectMode(CENTER);
 	osc = new p5.Oscillator();
+	osc2 = new p5.Oscillator();
+	osc3 = new p5.Oscillator();
+	osc4 = new p5.Oscillator();
 
-	envelope = new p5.Envelope();
-	envelope.setADSR(0.005, 0.2, 3, 3);
-	envelope.setRange(1, 0);
+	// Envelope Values
+	env = new p5.Envelope();
+	env2 = new p5.Envelope();
+	env3 = new p5.Envelope();
+	env4 = new p5.Envelope();
+	env.setADSR(.0001, 1, 100, 1);
+	env.setRange(1, 0);
+	env2.setADSR(.0001, 1, 1, 1);
+	env2.setRange(1, 0);
+	env3.setADSR(.0001, 1, 1, 1);
+	env3.setRange(1, 0);
+	env4.setADSR(.0001, 1, 1, 1);
+	env4.setRange(1, 0);
 
-	osc.setType('sine');
-	osc.amp(envelope);
+	// Oscillator Values
+	osc.amp(env);
 	osc.start();
-	osc.freq(200);
+	//
+	// osc2.amp(env2);
+	// osc2.start();
+	//
+	// osc3.amp(env3);
+	// osc3.start();
+	//
+	// osc4.amp(env4);
+	// osc4.start();
+	// console.log(osc);
+	// osc.freq(200);
 }
 
 function serverConnected() {
@@ -68,206 +92,613 @@ function serialEvent() {
 	if (!currentString) {
 		return; // if the string is empty, do no more
 	}
-	snareButton = currentString; // save it for the draw method
-
+	sensorValue = currentString; // save it for the draw method
+	// console.log(sensorValue);
+	if(sensorValue <= 160){
+		osc.setType("sine");
+		type = "sine";
+	}
+	if(sensorValue >= 161 && sensorValue <= 500){
+		osc.setType("square");
+		type = "square";
+	}
+	if(sensorValue >= 501 && sensorValue <= 750){
+		osc.setType("triangle");
+		type = "triangle";
+		// console.log(type);
+	}
+	if(sensorValue >= 751){
+		osc.setType("sawtooth");
+		type = "sawtooth";
+		// console.log(type);
+	}
 }
 
 function draw() {
-	background('200');
+	background('black');
+
+	fill('white')
+	rect(639,0,displayWidth, 300);
 
 	fill('white');
-	ellipse(mouseX, mouseY, 200 , 200);
+	ellipse(sensorValue, 100, 150 , 150);
 
 	fill('black');
 
-	// musicNote(note);
-	keyTyped(note);
-
-	text(note, width/2, height/8);
+	text(note, 1020, 75);
 
 	// fill(color(r,g,b));
 	fill('white');
 
-	// Sine
-	rect(175, 70, 150, 80);
-	// Square
-	rect(425, 70, 150, 80);
-	// Sawtooth
-	rect(850, 70, 150, 80);
-	// Triangle
-	rect(1100, 70, 150, 80);
+	// // Sine
+	// rect(175, 70, 150, 80);
+	// // Square
+	// rect(425, 70, 150, 80);
+	// // Sawtooth
+	// rect(850, 70, 150, 80);
+	// // Triangle
+	// rect(1100, 70, 150, 80);
 
 	fill('black');
-	text('sine', 180, 75);
-	text('square', 425, 75);
-	text('sawtooth', 850, 75);
-	text('triangle', 1100, 75);
+	text('sine', 120, 75);
+	text('square', 320, 75);
+	text('triangle', 620, 75);
+	text('sawtooth', 820, 75);
 
 	textSize(24);
-	text(mouseX +"Hz", mouseX, mouseY);
+	// text(mouseX +"Hz", mouseX, mouseY);
 
-	// console.log(sensorValue);
-	// console.log(sensorValue2);
+	// musicNote(note);
+	// keyPressed(note);
 
-		// if (snareButton != 0 && prevSnareButton == 0) {
-		// 	console.log('snare');
-		// 	snare.play();
-		// 	prevSnareButton = snareButton;
-		// }
-		// else {
-		// 	// snare.stop();
-		// 	if (snareButton == 0) {
-		// 		prevSnareButton = 0;
-		// 	}
-		// }
+	if(keyIsPressed && oscState1 == 0){
+		oscState1 == 1;
+		if(key == 'a'){
+			n = 60;
+			console.log(oscState1);
+			note = 'C';
+			osc.freq(n);
+			env.triggerAttack();
+			env.triggerRelease();
+		}
+		if(key == 'w'){
+			n = 61;
+			note = 'C#';
+			// console.log(oscState1);
+			console.log(n);
+			osc.freq(n);
+			env.triggerAttack();
+			env.triggerRelease();
+		}
+		if(key == 's'){
+			n = 62;
+			note = 'D';
+			osc.freq(n);
+			console.log(n);
+			env.triggerAttack();
+			env.triggerRelease();
+		}
+		if(key == 'e'){
+			n = 63;
+			note = 'D#';
+			osc.freq(n);
+			env.triggerAttack();
+			env.triggerRelease();
+		}
+		if(key == 'd'){
+			n = 64;
+			note = 'E';
+			osc.freq(n);
+			env.triggerAttack();
+			env.triggerRelease();
+		}
+		if(key == 'f'){
+			n = 65;
+			note = 'F';
+			osc.freq(n);
+			env.triggerAttack();
+			env.triggerRelease();
+		}
+		if(key == 't'){
+			n = 66;
+			note = 'F#';
+			osc.freq(n);
+			env.triggerAttack();
+			env.triggerRelease();
+		}
+		if(key == 'g'){
+			n = 67;
+			note = 'G';
+			osc.freq(n);
+			env.triggerAttack();
+			env.triggerRelease();
+		}
+		if(key == 'y'){
+			n = 68;
+			note = 'G#';
+			osc.freq(n);
+			env.triggerAttack();
+			env.triggerRelease();
+		}
+		if(key == 'h'){
+			n = 69;
+			note = 'A';
+			osc.freq(n);
+			env.triggerAttack();
+			env.triggerRelease();
+		}
+		if(key == 'u'){
+			n = 70;
+			note = 'A#';
+			osc.freq(n);
+			env.triggerAttack();
+			env.triggerRelease();
+		}
+		if(key == 'j'){
+			n = 71;
+			note = 'B';
+			osc.freq(n);
+			env.triggerAttack();
+			env.triggerRelease();
+		}
+		if(key == 'k'){
+			n = 72;
+			note = 'C(5)';
+			osc.freq(n);
+			env.triggerAttack();
+			env.triggerRelease();
+		}
+		if(key == 'o'){
+			n = 73;
+			note = 'C#(5)';
+			osc.freq(n);
+			env.triggerAttack();
+			env.triggerRelease();
+		}
+		if(key == 'l'){
+			n = 74;
+			note = 'D(5)';
+			osc.freq(n);
+			env.triggerAttack();
+			env.triggerRelease();
+		}
+		if(key == 'p'){
+			n = 75;
+			note = 'D#(5)';
+			osc.freq(n);
+			env.triggerAttack();
+			env.triggerRelease();
+		}
+		if(key == ';'){
+			n = 76;
+			note = 'E(5)';
+			osc.freq(n);
+			env.triggerAttack();
+			env.triggerRelease();
+		}
+		if(key == '\''){
+			note = 'F(5)';
+			n = 77;
+			osc.freq(n);
+			env.triggerAttack();
+			env.triggerRelease();
+		}
+		// console.log("osc1");
+	}
+	else if(keyIsPressed && oscState1 == 1 && osc2 == 0){
+		oscState2 == 1;
+		if(key == 'a'){
+			oscState2 = 1;
+			n = 60;
+			console.log(oscState2);
+			console.log(n);
+			osc.freq(n);
+			env.triggerAttack();
+			env.triggerRelease();
+		}
+		if(key == 'w'){
+			oscState1 = 1;
+			n = 61;
+			// console.log(oscState1);
+			console.log(n);
+			osc.freq(n);
+			env.triggerAttack();
+			env.triggerRelease();
+		}
+		if(key == 's'){
+			oscState1 = 1;
+			n = 62;
+			osc.freq(n);
+			console.log(n);
+			env.triggerAttack();
+			env.triggerRelease();
+		}
+		if(key == 'e'){
+			oscState1 = 1;
+			n = 63;
+			osc.freq(n);
+			env.triggerAttack();
+			env.triggerRelease();
+		}
+		if(key == 'd'){
+			oscState1 = 1;
+			n = 64;
+			osc.freq(n);
+			env.triggerAttack();
+			env.triggerRelease();
+		}
+		if(key == 'f'){
+			oscState1 = 1;
+			n = 65;
+			osc.freq(n);
+			env.triggerAttack();
+			env.triggerRelease();
+		}
+		if(key == 't'){
+			oscState1 = 1;
+			n = 66;
+			osc.freq(n);
+			env.triggerAttack();
+			env.triggerRelease();
+		}
+		if(key == 'g'){
+			oscState1 = 1;
+			n = 67;
+			osc.freq(n);
+			env.triggerAttack();
+			env.triggerRelease();
+		}
+		if(key == 'y'){
+			oscState1 = 1;
+			n = 68;
+			osc.freq(n);
+			env.triggerAttack();
+			env.triggerRelease();
+		}
+		if(key == 'h'){
+			oscState1 = 1;
+			n = 69;
+			osc.freq(n);
+			env.triggerAttack();
+			env.triggerRelease();
+		}
+		if(key == 'u'){
+			oscState1 = 1;
+			n = 70;
+			osc.freq(n);
+			env.triggerAttack();
+			env.triggerRelease();
+		}
+		if(key == 'j'){
+			oscState1 = 1;
+			n = 71;
+			osc.freq(n);
+			env.triggerAttack();
+			env.triggerRelease();
+		}
+		if(key == 'k'){
+			oscState1 = 1;
+			n = 72;
+			osc.freq(n);
+			env.triggerAttack();
+			env.triggerRelease();
+		}
+		if(key == 'o'){
+			oscState1 = 1;
+			n = 73;
+			osc.freq(n);
+			env.triggerAttack();
+			env.triggerRelease();
+		}
+		if(key == 'l'){
+			oscState1 = 1;
+			n = 74;
+			osc.freq(n);
+			env.triggerAttack();
+			env.triggerRelease();
+		}
+		if(key == 'p'){
+			oscState1 = 1;
+			n = 75;
+			osc.freq(n);
+			env.triggerAttack();
+			env.triggerRelease();
+		}
+		if(key == ';'){
+			oscState1 = 1;
+			n = 76;
+			osc.freq(n);
+			env.triggerAttack();
+			env.triggerRelease();
+		}
+		if(key == '\''){
+			oscState1 = 1;
+			n = 77;
+			osc.freq(n);
+			env.triggerAttack();
+			env.triggerRelease();
+		}
+		console.log("osc2");
+	}
 }
 
-function keyTyped1(){
-	// if(key === 'a' ){
-	// 	kick.play();
-	// }
-	// else if(key === 's'){
-	// 	snare.play();
-	// }
-	// else if(key === 'd'){
-	// 	hats.play();
-	// }
-	// else if(key === 'f'){
-	// 	clap.play();
-	// }
+
+function keyReleased(){
+	if(oscState1 == 1){
+		oscState1 = 0;
+	}
+	if(oscState2 == 1){
+		oscState2 = 0;
+	}
+	if(oscState3 == 1){
+		oscState3 = 0;
+	}
+	if(oscState4 == 1){
+		oscState4 = 0;
+	}
 }
 
+// function keyPressed(){
+	// Notes C4 - F5
+	// if(oscState1 == 0){
+	// 	if(key == 'a'){
+	// 		oscState1 = 1;
+	// 		n = 60;
+	// 		console.log(oscState1 + n);
+	// 		osc.freq(n);
+	// 		env.triggerAttack();
+	// 		env.triggerRelease();
+	// 	}
+	// 	if(key == 'w'){
+	// 		oscState1 = 1;
+	// 		n = 61;
+	// 		osc.freq(n);
+	// 		env.play();
+	// 	}
+	// 	if(key == 's'){
+	// 		oscState1 = 1;
+	// 		n = 62;
+	// 		osc.freq(n);
+	// 		env.play();
+	// 	}
+	// 	if(key == 'e'){
+	// 		oscState1 = 1;
+	// 		n = 63;
+	// 		osc.freq(n);
+	// 		env.play();
+	// 	}
+	// 	if(key == 'd'){
+	// 		oscState1 = 1;
+	// 		n = 64;
+	// 		osc.freq(n);
+	// 		env.play();
+	// 	}
+	// 	if(key == 'f'){
+	// 		oscState1 = 1;
+	// 		n = 65;
+	// 		osc.freq(n);
+	// 		env.play();
+	// 	}
+	// 	if(key == 't'){
+	// 		oscState1 = 1;
+	// 		n = 66;
+	// 		osc.freq(n);
+	// 		env.play();
+	// 	}
+	// 	if(key == 'g'){
+	// 		oscState1 = 1;
+	// 		n = 67;
+	// 		osc.freq(n);
+	// 		env.play();
+	// 	}
+	// 	if(key == 'y'){
+	// 		oscState1 = 1;
+	// 		n = 68;
+	// 		osc.freq(n);
+	// 		env.play();
+	// 	}
+	// 	if(key == 'h'){
+	// 		oscState1 = 1;
+	// 		n = 69;
+	// 		osc.freq(n);
+	// 		env.play();
+	// 	}
+	// 	if(key == 'u'){
+	// 		oscState1 = 1;
+	// 		n = 70;
+	// 		osc.freq(n);
+	// 		env.play();
+	// 	}
+	// 	if(key == 'j'){
+	// 		oscState1 = 1;
+	// 		n = 71;
+	// 		osc.freq(n);
+	// 		env.play();
+	// 	}
+	// 	if(key == 'k'){
+	// 		oscState1 = 1;
+	// 		n = 72;
+	// 		osc.freq(n);
+	// 		env.play();
+	// 	}
+	// 	if(key == 'o'){
+	// 		oscState1 = 1;
+	// 		n = 73;
+	// 		osc.freq(n);
+	// 		env.play();
+	// 	}
+	// 	if(key == 'l'){
+	// 		oscState1 = 1;
+	// 		n = 74;
+	// 		osc.freq(n);
+	// 		env.play();
+	// 	}
+	// 	if(key == 'p'){
+	// 		oscState1 = 1;
+	// 		n = 75;
+	// 		osc.freq(n);
+	// 		env.play();
+	// 	}
+	// 	if(key == ';'){
+	// 		oscState1 = 1;
+	// 		n = 76;
+	// 		osc.freq(n);
+	// 		env.play();
+	// 	}
+	// 	if(key == '\''){
+	// 		oscState1 = 1;
+	// 		n = 77;
+	// 		osc.freq(n);
+	// 		env.play();
+	// 	}
+	// }
+	//
+	// if(oscState1 == 1 && oscState2 == 0){
+	// 	if(key == 'a'){
+	// 		n = 60;
+	// 		oscState2 = 1;
+	// 		osc2.freq(n);
+	// 		env2.play();
+	// 	}
+	// 	if(key == 'w'){
+	// 		n = 61;
+	// 		console.log(oscState2 + n);
+	// 		oscState2 = 1;
+	// 		osc2.freq(n);
+	// 		env2.play();
+	// 	}
+	// 	if(key == 's'){
+	// 		n = 62;
+	// 		oscState2 = 1;
+	// 		osc2.freq(n);
+	// 		env2.play();
+	// 	}
+	// 	if(key == 'e'){
+	// 		n = 63;
+	// 		oscState2 = 1;
+	// 		osc2.freq(n);
+	// 		env2.play();
+	// 	}
+	// 	if(key == 'd'){
+	// 		n = 64;
+	// 		oscState2 = 1;
+	// 		osc2.freq(n);
+	// 		env2.play();
+	// 	}
+	// 	if(key == 'f'){
+	// 		n = 65;
+	// 		oscState2 = 1;
+	// 		osc2.freq(n);
+	// 		env2.play();
+	// 	}
+	// 	if(key == 't'){
+	// 		n = 66;
+	// 		oscState2 = 1;
+	// 		osc2.freq(n);
+	// 		env2.play();
+	// 	}
+	// 	if(key == 'g'){
+	// 		n = 67;
+	// 		oscState2 = 1;
+	// 		osc2.freq(n);
+	// 		env2.play();
+	// 	}
+	// 	if(key == 'y'){
+	// 		n = 68;
+	// 		oscState2 = 1;
+	// 		osc2.freq(n);
+	// 		env2.play();
+	// 	}
+	// 	if(key == 'h'){
+	// 		n = 69;
+	// 		oscState2 = 1;
+	// 		osc2.freq(n);
+	// 		env2.play();
+	// 	}
+	// 	if(key == 'u'){
+	// 		n = 70;
+	// 		oscState2 = 1;
+	// 		osc2.freq(n);
+	// 		env2.play();
+	// 	}
+	// 	if(key == 'j'){
+	// 		n = 71;
+	// 		oscState2 = 1;
+	// 		osc2.freq(n);
+	// 		env2.play();
+	// 	}
+	// 	if(key == 'k'){
+	// 		n = 72;
+	// 		oscState2 = 1;
+	// 		osc2.freq(n);
+	// 		env2.play();
+	// 	}
+	// 	if(key == 'o'){
+	// 		n = 73;
+	// 		oscState2 = 1;
+	// 		osc2.freq(n);
+	// 		env2.play();
+	// 	}
+	// 	if(key == 'l'){
+	// 		n = 74;
+	// 		oscState2 = 1;
+	// 		osc2.freq(n);
+	// 		env2.play();
+	// 	}
+	// 	if(key == 'p'){
+	// 		n = 75;
+	// 		oscState2 = 1;
+	// 		osc2.freq(n);
+	// 		env2.play();
+	// 	}
+	// 	if(key == ';'){
+	// 		n = 76;
+	// 		oscState2 = 1;
+	// 		osc2.freq(n);
+	// 		env2.play();
+	// 	}
+	// 	if(key == '\''){
+	// 		n = 77;
+	// 		oscState2 = 1;
+	// 		osc2.freq(n);
+	// 		env2.play();
+	// 	}
+	// }
+	// console.log(oscState1);
+	// console.log(oscState2);
+// }
 
-function keyTyped(n){
-	if(key == 'a'){
-		console.log("C3");
-		n = 60;
-		osc.freq(n);
-		envelope.play();
-	}
-	if(key == 'w'){
-		console.log("C#3");
-		n = 61;
-		osc.freq(n);
-		envelope.play();
-	}
-	if(key == 's'){
-		console.log("D3");
-		n = 62;
-		osc.freq(n);
-		envelope.play();
-	}
-	if(key == 'e'){
-		console.log("D#3");
-		n = 63;
-		osc.freq(n);
-		envelope.play();
-	}
-	if(key == 'd'){
-		console.log("e");
-		n = 64;
-		osc.freq(n);
-		envelope.play();
-	}
-	if(key == 'f'){
-		n = 65;
-		osc.freq(n);
-		envelope.play();
-	}
-	if(key == 't'){
-		n = 66;
-		osc.freq(n);
-		envelope.play();
-	}
-	if(key == 'g'){
-		n = 68;
-		osc.freq(n);
-		envelope.play();
-	}
-	if(key == 'h'){
-		n = 70;
-		osc.freq(n);
-		envelope.play();
-	}
-	if(key == 'j'){
-		n = 72;
-		osc.freq(n);
-		envelope.play();
-	}
-	if(key == 'k'){
-		n = 74;
-		osc.freq(n);
-		envelope.play();
-	}
-	if(key == 'l'){
-		n = 76;
-		osc.freq(n);
-		envelope.play();
-	}
-	if(key == ';'){
-		n = 78;
-		osc.freq(n);
-		envelope.play();
-	}
-	if(key == '\''){
-		n = 80;
-		osc.freq(n);
-		envelope.play();
-	}
+function mmousePressed(){
+	// if(mouseX > 100 && mouseX < 250 && mouseY > 30 && mouseY < 110){
+	// 	console.log("btn1 was clicked");
+	// 	osc.setType("sine");
+	// 	// playing = true;
+	// 	r = 0;
+	// 	b = 0;
+	//
+	// }
 	// else if(mouseX > 350 && mouseX < 500 && mouseY > 30 && mouseY < 110){
 	// 	console.log("btn2 was clicked");
 	// 	osc.setType("square");
-	// 	osc.amp(1);
-	// 	playing = true;
+	// 	// osc.amp(1);
+	// 	// playing = true;
 	// }
 	// else if(mouseX > 775 && mouseX < 925 && mouseY > 30 && mouseY < 110){
 	// 	console.log("btn3 was clicked");
 	// 	osc.setType("sawtooth");
-	// 	osc.amp(1);
-	// 	playing = true;
+	// 	// osc.amp(1);
+	// 	// playing = true;
 	// }
 	// else if(mouseX > 1025 && mouseX < 1175 && mouseY > 30 && mouseY < 110){
 	// 	console.log("btn4 was clicked");
 	// 	osc.setType("triangle");
-	// 	osc.amp(1);
-	// 	playing = true;
+	// 	// osc.amp(1);
+	// 	// playing = true;
 	// }
 	// else{
 	// 	osc.amp(0);
 	// }
 }
-// function mousePressed(){
-// 	if(mouseX > 100 && mouseX < 250 && mouseY > 30 && mouseY < 110){
-// 		console.log("btn1 was clicked");
-// 		osc.setType("sine");
-// 		osc.amp(1);
-// 		playing = true;
-// 		r = 0;
-// 		b = 0;
-//
-// 	}
-// 	else if(mouseX > 350 && mouseX < 500 && mouseY > 30 && mouseY < 110){
-// 		console.log("btn2 was clicked");
-// 		osc.setType("square");
-// 		osc.amp(1);
-// 		playing = true;
-// 	}
-// 	else if(mouseX > 775 && mouseX < 925 && mouseY > 30 && mouseY < 110){
-// 		console.log("btn3 was clicked");
-// 		osc.setType("sawtooth");
-// 		osc.amp(1);
-// 		playing = true;
-// 	}
-// 	else if(mouseX > 1025 && mouseX < 1175 && mouseY > 30 && mouseY < 110){
-// 		console.log("btn4 was clicked");
-// 		osc.setType("triangle");
-// 		osc.amp(1);
-// 		playing = true;
-// 	}
-// 	else{
-// 		osc.amp(0);
-// 	}
-// }
 
 function musicNote(n){
 
@@ -617,3 +1048,31 @@ function musicNote(n){
 
 
 }
+
+// function keyTyped1(){
+	// if(key === 'a' ){
+	// 	kick.play();
+	// }
+	// else if(key === 's'){
+	// 	snare.play();
+	// }
+	// else if(key === 'd'){
+	// 	hats.play();
+	// }
+	// else if(key === 'f'){
+	// 	clap.play();
+	// }
+// }
+
+// if (snareButton != 0 && prevSnareButton == 0) {
+// 	console.log('snare');
+// 	snare.play();
+// 	prevSnareButton = snareButton;
+// }
+// else {
+// 	// snare.stop();
+// 	if (snareButton == 0) {
+// 		prevSnareButton = 0;
+// 	}
+// }
+// console.log(osc);
